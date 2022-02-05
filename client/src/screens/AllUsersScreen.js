@@ -20,10 +20,10 @@ import { makeStyles } from '@mui/styles';
 
 import Layout from '../components/Layout';
 import Loader from '../components/Loader';
-import { Link } from 'react-router-dom';
+
 import ResponseMessage from '../components/ResponseMessage';
-// import AddUsers from './AddUsers';
-import UpdateUser from './UpdateUser';
+import UpdateUserScreen from './UpdateUserScreen';
+import AddUserScreen from './AddUserScreen';
 
 const useStyles = makeStyles((theme) => ({
   section: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AllUsers = () => {
+const AllUsersScreen = () => {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -74,7 +74,7 @@ const AllUsers = () => {
   }, []);
 
   return (
-    <Layout title="Users" className={classes.container}>
+    <Layout title="All Users" className={classes.container}>
       <Grid container spacing={1}>
         <Grid item md={12} xs={12}>
           <Card className={classes.section}>
@@ -90,10 +90,7 @@ const AllUsers = () => {
                 </Grid>
                 <Grid item>
                   <ListItem>
-                    <Button component={Link} to="/add-user" variant="outlined">
-                      Add User
-                    </Button>
-                    {/* <AddUsers /> */}
+                    <AddUserScreen />
                   </ListItem>
                 </Grid>
               </Grid>
@@ -108,7 +105,6 @@ const AllUsers = () => {
                     <Table>
                       <TableHead>
                         <TableRow>
-                          <TableCell>ID</TableCell>
                           <TableCell>NAME</TableCell>
                           <TableCell>EMAIL</TableCell>
                           <TableCell>ROLE</TableCell>
@@ -119,14 +115,13 @@ const AllUsers = () => {
                         {users &&
                           users.map((user) => (
                             <TableRow key={user.id}>
-                              <TableCell>{user.id}</TableCell>
                               <TableCell>{user.name}</TableCell>
                               <TableCell>{user.email}</TableCell>
                               <TableCell>
                                 {user.isAdmin ? 'Admin' : 'User'}
                               </TableCell>
                               <TableCell>
-                                <UpdateUser user={user} />
+                                <UpdateUserScreen user={user} />
                               </TableCell>
                               <TableCell>
                                 <Button
@@ -152,4 +147,4 @@ const AllUsers = () => {
   );
 };
 
-export default AllUsers;
+export default AllUsersScreen;

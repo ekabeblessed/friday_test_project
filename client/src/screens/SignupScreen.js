@@ -76,7 +76,7 @@ const SignupScreen = () => {
     }
   };
   return (
-    <Layout title="Register" maxWidth="sm">
+    <Layout title="Sign up" maxWidth="sm">
       <form onSubmit={handleSubmit(submitHandler)} className={classes.form}>
         <Typography variant="h4" align="center">
           Sign up

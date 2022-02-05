@@ -1,83 +1,49 @@
-import React, { Fragment, useState } from 'react';
-import { addUser } from '../actions/authActions';
-
-import ResponseMessage from '../components/ResponseMessage';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
-  Grid,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Typography,
-  TextField,
   Dialog,
   Snackbar,
+  Typography,
+  TextField,
   Button,
-  Divider,
 } from '@mui/material';
-
+import ResponseMessage from '../components/ResponseMessage';
 import { Link } from 'react-router-dom';
+import { addUser } from '../actions/authActions';
 import { makeStyles } from '@mui/styles';
-import { useSnackbar } from 'notistack';
 import { Controller, useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    ...theme.typography.auth,
-    marginLeft: 'auto',
-    '&::active': {
-      color: 'none',
-    },
-  },
-
-  Title: {
-    alignContent: 'center',
-    justifyContent: 'center',
-  },
   link: {
     textDecoration: 'none',
-
-    marginBottom: '1rem',
-    marginLeft: '1rem',
-    marginRight: '1rem',
-
-    color: 'black',
-  },
-
-  authButton: {
-    margin: '1rem',
-  },
-  dialogue: {
-    zIndex: 1302,
+    color: '#222',
   },
 }));
 
-export default function AddUsers() {
+const AddUserScreen = () => {
   const classes = useStyles();
-
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm();
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   // eslint-disable-next-line
   const [name, setName] = useState('');
   // eslint-disable-next-line
   const [email, setEmail] = useState('');
   // eslint-disable-next-line
   const [password, setPassword] = useState('');
-
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
-
-  const [isLoading, setIsLoading] = useState(false);
-  // eslint-disable-next-line
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const [open, setOpen] = useState(false);
 
-  const onDialogClose = () => {
-    setDialogOpen(false);
-  };
   const onSnackbarClose = (e, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -87,37 +53,23 @@ export default function AddUsers() {
     setError('');
   };
 
-  const onCreate = () => {
-    onDialogClose();
-    setSnackbarOpen(false);
-  };
-
-  const history = useHistory();
-  const [error, setError] = useState();
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const onSubmitHandler = async ({ name, email, password }) => {
     closeSnackbar();
     try {
-      setIsLoading(true);
+      setLoading(true);
       // eslint-disable-next-line
       const res = await addUser({
         name,
         email,
         password,
       });
-
-      if (res) {
-        enqueueSnackbar('Sucessfully added user', { variant: 'success' });
-        setName('');
-        setEmail('');
-        setPassword('');
-        setIsLoading(false);
-        onDialogClose();
-        window.redirect = '/';
-        history.push('/users');
-      }
+      setName('');
+      setEmail('');
+      setPassword('');
+      window.location.reload();
+      enqueueSnackbar('User Added', { variant: 'success' });
     } catch (error) {
-      setIsLoading(false);
+      setLoading(false);
       setError(
         error.response && error.response.data.message
           ? error.response.data.message
@@ -125,17 +77,16 @@ export default function AddUsers() {
       );
     }
   };
-
   return (
-    <Fragment>
+    <>
       <Button
         component={Link}
-        variant="contained"
+        variant="outlined"
         className={classes.button}
         color="primary"
         onClick={() => setOpen(true)}
       >
-        ADD NEW USER
+        Add New User
       </Button>
 
       <Dialog
@@ -146,7 +97,12 @@ export default function AddUsers() {
         onClose={() => setOpen(false)}
       >
         <DialogTitle className={classes.Title}>
-          <Typography align="center" justify="center" variant="h4">
+          <Typography
+            align="center"
+            justify="center"
+            component="h1"
+            variant="h4"
+          >
             Add New User
           </Typography>
           {error && (
@@ -180,8 +136,8 @@ export default function AddUsers() {
                 <TextField
                   variant="filled"
                   fullWidth
-                  id="name"
                   style={{ marginBottom: '1rem' }}
+                  id="name"
                   className={classes.textInput}
                   label="Name"
                   inputProps={{ type: 'name' }}
@@ -196,7 +152,7 @@ export default function AddUsers() {
                   {...field}
                 ></TextField>
               )}
-            ></Controller>{' '}
+            ></Controller>
             <Controller
               name="email"
               control={control}
@@ -256,24 +212,13 @@ export default function AddUsers() {
             ></Controller>
           </DialogContent>
           <DialogActions>
-            <Grid container direction="column" justify="center" align="center">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                onClick={onCreate}
-                onSubmit={onSubmitHandler}
-                className={classes.submit}
-              >
-                {isLoading ? (
-                  <Typography>Adding New User</Typography>
-                ) : (
-                  <Typography>Add new User</Typography>
-                )}
-              </Button>
-
-              <Divider />
-            </Grid>
+            <Button variant="contained" type="submit" fullWidth color="primary">
+              {loading ? (
+                <Typography>Adding New user</Typography>
+              ) : (
+                <Typography> Add user</Typography>
+              )}
+            </Button>
           </DialogActions>
         </form>
       </Dialog>
@@ -284,6 +229,8 @@ export default function AddUsers() {
         onClose={onSnackbarClose}
         autoHideDuration={4000}
       />
-    </Fragment>
+    </>
   );
-}
+};
+
+export default AddUserScreen;

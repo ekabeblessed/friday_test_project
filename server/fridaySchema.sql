@@ -8,12 +8,12 @@ CREATE TABLE users(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 	
-)
+);
 
 INSERT INTO users (name, email, password)
-VALUES ('user', 'user@friday.com', 'user')
-VALUES ('admin', 'admin@friday.com', 'user')
+VALUES('Friday User', 'user@friday.com', 'userpassword'),
+    ('Friday Admin', 'admin@friday.com', 'adminpassword');
 
--- UPDATE users SET is_admin = true WHERE email = 'admin@friday.com';
+UPDATE users SET is_admin = true WHERE email = 'admin@friday.com';
 
 SELECT * FROM users;

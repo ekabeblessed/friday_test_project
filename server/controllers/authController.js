@@ -49,37 +49,3 @@ exports.protect = (req, res, next) => {
     next();
   });
 };
-
-exports.restrictTo = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to perform this action', 403)
-      );
-    }
-
-    next();
-  };
-};
-exports.isAdmin = (...roles) => {
-  return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return next(
-        new AppError('You do not have permission to perform this action', 403)
-      );
-    }
-
-    next();
-  };
-};
-
-exports.adminRoute = asyncErrors(async (req, res, next) => {
-  const { rows } = await pool.query('SELECT * FROM users WHERE is_admin=true');
-  console.log(rows);
-  if (req.rows) {
-    next();
-  }
-  return next(
-    new AppError('You do not have permission to perform this action', 403)
-  );
-});

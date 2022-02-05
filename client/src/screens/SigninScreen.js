@@ -50,11 +50,13 @@ const SigninScreen = () => {
         password,
       });
 
-      window.localStorage.setItem('auth', JSON.stringify(data.jwtToken));
+      // window.localStorage.setItem('auth', JSON.stringify(data.jwtToken));
+      window.localStorage.setItem('auth', JSON.stringify(data.rows));
       enqueueSnackbar('Sucessfully signed in', { variant: 'success' });
-      dispatch({ type: 'LOGGED_IN_USER', payload: data });
+      dispatch({ type: 'LOGGED_IN_USER', payload: data.rows });
       history.push('/protected');
     } catch (error) {
+      console.log(error.message);
       setLoading(false);
       setError(
         error.response && error.response.data.message

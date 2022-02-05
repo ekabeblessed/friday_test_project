@@ -3,11 +3,11 @@ import { ThemeProvider } from '@mui/styles';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import HomeScreen from './screens/HomeScreen';
-import AllUsers from './screens/AllUsers';
-// import UpdateUser from './screens/UpdateUser';
+import AllUsersScreen from './screens/AllUsersScreen';
+import UpdateUserScreen from './screens/UpdateUserScreen';
 import SignupScreen from './screens/SignupScreen';
 import SigninScreen from './screens/SigninScreen';
-import InsertUsers from './screens/InsertUsers';
+import AddUserScreen from './screens/AddUserScreen';
 import SignoutScreen from './screens/SignoutScreen';
 import ProtectedScreen from './screens/ProtectedScreen';
 
@@ -20,17 +20,17 @@ import AdminRoute from './components/AdminRoute';
 const App = () => {
   return (
     <ThemeProvider theme={Theme}>
-      <Fragment className="App">
+      <Fragment>
         <BrowserRouter>
           <Header />
           <Switch>
             <Route exact path="/" component={HomeScreen} />
             <Route exact path="/signin" component={SigninScreen} />
-            {/* <Route exact path="/update/:id" component={UpdateUser} /> */}
+            <Route exact path="/update-user" component={UpdateUserScreen} />
             <Route exact path="/signup" component={SignupScreen} />
             <Route exact path="/logout" component={SignoutScreen} />
-            <AdminRoute exact path="/add-user" component={InsertUsers} />
-            <AdminRoute exact path="/users" component={AllUsers} />
+            <AdminRoute exact path="/add-user" component={AddUserScreen} />
+            <AdminRoute exact path="/users" component={AllUsersScreen} />
             <PrivateRoute exact path="/protected" component={ProtectedScreen} />
           </Switch>
         </BrowserRouter>

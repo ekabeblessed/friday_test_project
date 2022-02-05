@@ -2,6 +2,7 @@ import React, { Fragment, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
+
 import {
   Grid,
   DialogTitle,
@@ -9,13 +10,10 @@ import {
   DialogActions,
   Typography,
   TextField,
-  // FormControlLabel,
-  // Checkbox,
   Dialog,
   Snackbar,
   Button,
   Divider,
-  // ListItem,
 } from '@mui/material';
 import { useSnackbar } from 'notistack';
 
@@ -51,22 +49,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateUser = ({ user }) => {
+const UpdateUserScreen = ({ user }) => {
   const classes = useStyles();
 
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
 
   const [isLoading, setIsLoading] = useState(false);
+
   // eslint-disable-next-line
   const [dialogOpen, setDialogOpen] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [error, setError] = useState();
   const [open, setOpen] = useState(false);
 
-  const onDialogClose = () => {
-    setDialogOpen(false);
-  };
   const onSnackbarClose = (e, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -75,26 +73,23 @@ const UpdateUser = ({ user }) => {
     setSnackbarMessage('');
     setError('');
   };
-  const onCreate = () => {
-    onDialogClose();
-  };
-  // eslint-disable-next-line
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  const [error, setError] = useState();
 
   const onUpdateHandler = async (e) => {
     e.preventDefault();
     try {
+      closeSnackbar();
       setIsLoading(true);
-
       // eslint-disable-next-line
       const { data } = await axios.patch(
-        `http://localhost:3001/api/users/${user.id}`
+        `http://localhost:3001/api/users/${user.id}`,
+        {
+          name,
+          email,
+        }
       );
-
-      console.log(data);
-      enqueueSnackbar('User updated ', { variant: 'success' });
-      window.redirect = '/users';
+      window.location.reload();
+      enqueueSnackbar('User has been updated ', { variant: 'success' });
+      setOpen(false);
     } catch (error) {
       setIsLoading(false);
       setError(
@@ -144,14 +139,13 @@ const UpdateUser = ({ user }) => {
         <form className={classes.form} noValidate onSubmit={onUpdateHandler}>
           <DialogContent>
             <TextField
-              value={name}
+              style={{ marginBottom: '1rem' }}
+              onChange={(e) => setName(e.target.value)}
               variant="filled"
+              value={name}
               fullWidth
               id="name"
-              style={{ marginBottom: '1rem' }}
-              className={classes.textInput}
               label="Name"
-              onChange={(e) => setName(e.target.value)}
             />
 
             <TextField
@@ -163,18 +157,6 @@ const UpdateUser = ({ user }) => {
               id="email"
               label="Email"
             />
-            {/* <ListItem>
-              <FormControlLabel
-                label="Is Admin"
-                control={
-                  <Checkbox
-                    onClick={(e) => setIsAdmin(e.target.checked)}
-                    checked={isAdmin}
-                    name="isAdmin"
-                  />
-                }
-              ></FormControlLabel>
-            </ListItem> */}
           </DialogContent>
           <DialogActions>
             <Grid container direction="column" justify="center" align="center">
@@ -182,7 +164,6 @@ const UpdateUser = ({ user }) => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                onClick={onCreate}
                 onSubmit={onUpdateHandler}
                 className={classes.submit}
               >
@@ -209,4 +190,4 @@ const UpdateUser = ({ user }) => {
   );
 };
 
-export default UpdateUser;
+export default UpdateUserScreen;

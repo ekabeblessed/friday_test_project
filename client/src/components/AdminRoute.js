@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 const AdminRoute = ({ ...rest }) => {
   const { auth } = useSelector((state) => ({ ...state }));
 
-  return auth && auth.rows.is_admin === true ? (
+  return auth && auth.is_admin === true ? (
     <Route {...rest} />
   ) : (
     <Redirect to="/protected" />

@@ -5,11 +5,7 @@ import { useSelector } from 'react-redux';
 const PrivateRoute = ({ ...rest }) => {
   const { auth } = useSelector((state) => ({ ...state }));
 
-  return auth && auth.jwtToken ? (
-    <Route {...rest} />
-  ) : (
-    <Redirect to="/signin" />
-  );
+  return auth !== null ? <Route {...rest} /> : <Redirect to="/signin" />;
 };
 
 export default PrivateRoute;

@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 
 const ProtectedScreen = () => {
   return (
-    <Layout>
+    <Layout title="Protected Screen">
       <Typography variant="h4" align="center" justify="center">
         This is the protected screen
       </Typography>
