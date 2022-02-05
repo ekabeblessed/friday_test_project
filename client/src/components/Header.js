@@ -54,8 +54,8 @@ const Header = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tabs indicatorColor="white">
-              {auth !== null && auth.rows.is_admin === true ? (
+            <Tabs indicatorColor="primary">
+              {auth !== null && auth.is_admin === true ? (
                 <Tab
                   className={classes.tabs}
                   disableRipple
@@ -64,14 +64,6 @@ const Header = () => {
                   to="/users"
                 />
               ) : undefined}
-
-              {/* <Tab
-                className={classes.tabs}
-                disableRipple
-                label="All Users"
-                component={Link}
-                to="/users"
-              /> */}
 
               {auth !== null && (
                 <Tab
@@ -82,6 +74,7 @@ const Header = () => {
                   to="/protected"
                 />
               )}
+
               {auth === null && (
                 <Tab
                   className={classes.tabs}
